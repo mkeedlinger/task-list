@@ -16,6 +16,26 @@ body {
 	margin-top: 10px;
 	cursor: default;
 }
+.cover {
+	z-index: 900;
+	/*visibility: hidden;*/
+}
+
+div.cover {
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(50,50,60,.8);
+}
+
+.cover .cube {
+	top: 30%;
+	left: 50%;
+	z-index: 910;
+}
+
 #title {
 	margin: 0 auto;
 	width: 70%;
@@ -94,7 +114,7 @@ input[type=checkbox] {
 	width: 28px;
 	height: 28px;
 	background: #fcfff4;
-	margin-left: 1%;
+	margin-left: 5px;
 
 	background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
 	background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
@@ -138,6 +158,7 @@ input[type=checkbox] {
 	filter: alpha(opacity=0);
 	opacity: 0;
 	content: '';
+
 	position: absolute;
 	width: 9px;
 	height: 5px;
