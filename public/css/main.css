@@ -1,8 +1,15 @@
 /* this is super useful:
 	-webkit-calc(100% - 18px) */
 
+html, body {
+	width: 100%;
+	margin: 0;
+}
+
 body {
-	background-color: #7E8AA2;
+	background-color: #758CB9;
+	/*background-color: #BFC9DE;*/
+	/*background-color: #0C1017;*/
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -10,6 +17,15 @@ body {
 	user-select: none;
 	overflow-x: hidden; /*makes no scroll bar for horizontal scrolling*/
 }
+
+footer {
+	background-color: #151B28;
+	top: 100%;
+	z-index: 800;
+	height: 50px;
+	width: 100%;
+}
+
 #title h1 {
 	font-family: 'Roboto', sans-serif;
 	color: #121721;
@@ -54,7 +70,7 @@ h3.cover {
 	border-bottom-color: #263248;
 	border-bottom-width: 3px;
 }
-#list ul li div [type="text"] { /*this selector is very verbose because*/
+#list ul li div [type="text"] {
 	width: -webkit-calc(100% - 150px);
 	border-style: none;
 	background-color: rgba(18,23,33,.8);
@@ -63,6 +79,10 @@ h3.cover {
 	user-select: text;
 	margin-left: 1%;
 	color: #F5DCD0;
+}
+
+#list ul li div [type="text"]:not(:focus) {
+	/*padding-left: 3px;*/
 }
 /*just some placeholder colors*/
 ::-webkit-input-placeholder { /* WebKit browsers */
