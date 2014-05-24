@@ -20,9 +20,12 @@ Settings scripts
 */
 if (mke.settings.verbose === false) {
 	mke.info = function() {;};
-	console.info('Verbose enabled');
 } else if (typeof mke.settings.verbose != typeof true) {
 	throw Error('Type of settings.verbose must == boolean')
+} else if (mke.settings.verbose) {
+	console.info('Verbose enabled');
+} else {
+	throw Error('Something must be terribly wrong.. Check your settings');
 };
 
 
@@ -44,4 +47,14 @@ mke.UUID = function () {
 
 mke.info = function (text) {
 	console.info(text);
+}
+
+
+/*
+######################
+Helper scripts
+######################
+*/
+if (!Date.now) {
+    Date.now = function() { return new Date().getTime(); };
 }

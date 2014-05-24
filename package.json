@@ -1,0 +1,17 @@
+{
+	"name": "notLater",
+	"version": "0.0.1",
+	"description": "A simple task manager",
+	"author": {
+		"name": "mkeedlinger",
+		"real-name": "Michael Edlinger",
+		"email": "mkeedlinger@gmail.com"
+	},
+	"dependencies": {
+		"express": "^4.2.0",
+		"rethinkdb": "^1.12.0-0",
+		"socket.io": "^0.9.16",
+		"colors": "^0.6.2"
+	},
+	"private": true
+}

@@ -48,6 +48,7 @@ function createLi (textValue, checked, id) { // returns an li to be inserted in 
 	};
 	newInputCheckbox.setAttribute('id', randomUUID);
 	newInputCheckbox.setAttribute('name', 'checkbox');
+	newInputCheckbox.onchange = liveUpdater;
 
 	// label
 	newCheckBoxLabel.setAttribute('for', randomUUID);
@@ -58,6 +59,7 @@ function createLi (textValue, checked, id) { // returns an li to be inserted in 
 	newInputText.value = textValue || '';
 	newInputText.setAttribute('maxlength', '150');
 	newInputText.onkeydown = textboxKeydownSwitch;
+	newInputText.onkeyup = liveUpdater;
 
 	// button
 	newButton.setAttribute('data-uuid', globalUUID);
@@ -74,7 +76,7 @@ function createLi (textValue, checked, id) { // returns an li to be inserted in 
 	return newLi;
 }
 
-function deleteTask () { // deletes the active li
+function deleteTask (event) { // deletes the active li
 	var currentLi = this.parentElement.parentElement;
 	if (currentLi.parentElement.childElementCount > 1) {
 		currentLi.remove();
@@ -82,6 +84,7 @@ function deleteTask () { // deletes the active li
 		&& currentLi.parentElement.childElementCount === 1) {
 		this.previousElementSibling.value = '';
 	};
+	liveUpdater(event);
 }
 
 function showCover () { // shows the cover
@@ -93,12 +96,6 @@ function hideCover () { // hides the cover
 	document.getElementById('coverDiv')
 	.style.visibility = 'hidden'
 	document.getElementsByClassName('cube')[0].remove();
-}
-
-function isEntireLiTextbox () { // returns boolean of if the active element is the task textbox
-	return document.activeElement.getAttribute('type') === 'text'
-	&& document.activeElement
-	.parentElement.className === 'entireLi'
 }
 
 function moveLiUp (ob) { // moves the active li above the one above it
@@ -134,12 +131,14 @@ function emptyLiCleaner () { // clears out all empty li's
 	for (var i = 0; i < removeList.length; i++) {
 		removeList[i].remove();
 	}
+	list.lastElementChild.getElementsByClassName('entireLi')[0]
+	.getElementsByTagName('input')[1].focus();
 }
 
 function getTaskInfo () { // returns list with all info about tasks
 	var list = document.getElementById('list'),
-		returnList = [],
-		omitList = [];
+		returnLiList = [],
+		returns = {};
 	list = list.getElementsByTagName('ul')[0];
 	for (var i = 0; i < list.childElementCount; i++){
 		var textboxContents = list.children[i];
@@ -149,23 +148,19 @@ function getTaskInfo () { // returns list with all info about tasks
 
 		var liInfo = {};
 		liInfo.order = i;
-		liInfo.uuid = list.children[i].id;
+		liInfo.id = list.children[i].id;
 		liInfo.task = textboxContents;
 		liInfo.checked = list.children[i]
 			.getElementsByClassName('roundToggle')[0]
 			.getElementsByTagName('input')[0].checked
 		if (textboxContents != '') {
-			returnList.push(liInfo);
-		} else {
-			omitList.push(liInfo);
+			returnLiList.push(liInfo);
 		};
 	}
-	mke.info(omitList, 'Omitted because empty');
-	return returnList
-}
-
-function createInitList () { // creates the list from db when the page loads
-	;
+	returns.id = document.getElementById('list').uuid;
+	returns.name = document.getElementById('list').name;
+	returns.list = returnLiList;
+	return returns;
 }
 
 function toggleCheckbox (ob) { // should toggle the checkbox of the active li
@@ -205,9 +200,10 @@ function textboxKeydownSwitch (event) { // handles textbox keydowns
 					}, 5)
 				};
 				break;
-		default:
-			break;
+			default:
+				break;
 		}
+		// liveUpdater(event);
 	} else if (event.altKey) {
 		switch (event.keyCode){
 			case 40: // down arrow key
@@ -232,6 +228,8 @@ function windowKeydownSwitch (event) { // handles all window keydowns
 		switch (event.keyCode) {
 			case undefined:
 				break;
+			default:
+				break;
 		}
 	} else if (event.altKey) {
 		switch (event.keyCode){
@@ -244,10 +242,44 @@ function windowKeydownSwitch (event) { // handles all window keydowns
 	};
 }
 
+function liveUpdater (event) {
+	var taskInfo = getTaskInfo();
+	if (event) {
+		if (event.timeStamp - liveHelper.sinceLastInput >= 1500
+			&& JSON.stringify(liveHelper
+				.pastState) != JSON.stringify(taskInfo)) {
+			liveHelper.sinceLastInput = event.timeStamp;
+			socket.emit('liveUpdater', taskInfo);
+		};
+	} else {
+		socket.emit('liveUpdater', taskInfo);
+	};
+	liveHelper.timer = liveHelper.timer || setTimeout(function() {liveUpdater();liveHelper.timer=null}, 1500);
+	liveHelper.pastState = taskInfo;
+}
+
+function createInitList (data) {
+	for (var i in data) {
+		addLiLast(data[i].task, data[i].checked, data[i].uuid);
+	};
+	hideCover();
+}
+
+function setListDetails (uuid, name) { // set id of ul
+	document.getElementById('list')
+	.uuid = uuid;
+	document.getElementById('list')
+	.name = name;
+}
+
 /*
 ######################
 "Global" Variables
 ######################
 */
 
-var cubeKeeper = '';
+var liveHelper = {
+		sinceLastInput: Date.now(),
+		timer: null
+	},
+	initData;

@@ -1,5 +1,6 @@
 /* this is super useful:
 	-webkit-calc(100% - 18px) */
+		-moz-calc(100% - 18px) */
 
 html, body {
 	width: 100%;
@@ -52,7 +53,9 @@ h3.cover {
 	margin: 0 auto;
 	position: absolute;
 	top: -webkit-calc(30% + 110px);
+	top: -moz-calc(30% + 110px);
 	left: -webkit-calc(50% - 10px);
+	left: -moz-calc(50% - 10px);
 	font-family: 'Roboto Slab', serif;
 	font-size: 24px;
 }
@@ -72,6 +75,7 @@ h3.cover {
 }
 #list ul li div [type="text"] {
 	width: -webkit-calc(100% - 150px);
+	width: -moz-calc(100% - 150px);
 	border-style: none;
 	background-color: rgba(18,23,33,.8);
 	border-radius: 2px;
@@ -220,4 +224,5 @@ input[type=checkbox] {
 div.entireLi button {
 	float: right;
 	margin-right: 10px;
+	width: 82px;
 }
