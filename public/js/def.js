@@ -279,6 +279,10 @@ function createInitList (data) {
 	for (var i in data) {
 		addLiLast(data[i].task, data[i].checked, data[i].uuid);
 	};
+	if (data.list.length === 0) {
+		addLiLast();
+	};
+	setListDetails(data.id, data.name);
 	hideCover();
 }
 
@@ -302,6 +306,7 @@ function reInitList (data) {
 	for (var i in data.list) {
 		addLiLast(data.list[i].task, data.list[i].checked, data.list[i].uuid);
 	};
+	setListDetails(data.id, data.name);
 	if (data.list.length === 0) {
 		addLiLast();
 	};
