@@ -77,6 +77,7 @@ function createLi (textValue, checked, id) { // returns an li to be inserted in 
 }
 
 function deleteTask (event) { // deletes the active li
+	console.log(this);
 	var currentLi = this.parentElement.parentElement;
 	if (currentLi.parentElement.childElementCount > 1) {
 		currentLi.remove();
@@ -217,6 +218,8 @@ function textboxKeydownSwitch (event) { // handles textbox keydowns
 			case 190: // period key
 				toggleCheckbox(this);
 				break;
+			case 188: // comma key
+				this.nextElementSibling.click();
 			default:
 				break;
 		};
@@ -226,7 +229,21 @@ function textboxKeydownSwitch (event) { // handles textbox keydowns
 function windowKeydownSwitch (event) { // handles all window keydowns
 	if (!event.altKey) {
 		switch (event.keyCode) {
-			case undefined:
+			case 40: // down arrow key
+				var firstLiText = document.getElementById('list').firstElementChild
+				.firstElementChild.firstElementChild
+				.firstElementChild.nextElementSibling;
+				if (document.activeElement.type != 'text') {
+					firstLiText.focus();
+				};
+				break;
+			case 38: // up arrow key
+				var lastLiText = document.getElementById('list').firstElementChild.
+				lastElementChild.firstElementChild
+				.firstElementChild.nextElementSibling;
+				if (document.activeElement.type != 'text') {
+					lastLiText.focus();
+				};
 				break;
 			default:
 				break;
@@ -245,8 +262,8 @@ function windowKeydownSwitch (event) { // handles all window keydowns
 function liveUpdater (event) {
 	var taskInfo = getTaskInfo();
 	if (event) {
-		if (event.timeStamp - liveHelper.sinceLastInput >= 1500
-			&& JSON.stringify(liveHelper
+		if (/*event.timeStamp - liveHelper.sinceLastInput >= 1500
+			&& */JSON.stringify(liveHelper
 				.pastState) != JSON.stringify(taskInfo)) {
 			liveHelper.sinceLastInput = event.timeStamp;
 			socket.emit('liveUpdater', taskInfo);
@@ -270,6 +287,24 @@ function setListDetails (uuid, name) { // set id of ul
 	.uuid = uuid;
 	document.getElementById('list')
 	.name = name;
+}
+
+function removeList () { // deletes all li's
+	var list = document.getElementById('list').firstElementChild
+	.children;
+	for (var i = list.length - 1; i>=0; i--) {
+		list[i].remove();
+	}
+}
+
+function reInitList (data) {
+	removeList();
+	for (var i in data.list) {
+		addLiLast(data.list[i].task, data.list[i].checked, data.list[i].uuid);
+	};
+	if (data.list.length === 0) {
+		addLiLast();
+	};
 }
 
 /*

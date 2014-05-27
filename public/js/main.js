@@ -13,11 +13,15 @@ window.onload = function(event) {
 	});
 
 	socket.on('updateClient', function (data) {
-		;// update list from server
+		reInitList(data);
 	})
-
 };
 
 window.onkeydown = function(event){
 	windowKeydownSwitch(event);
 };
+
+window.onbeforeunload = function (event) {
+	liveUpdater();
+	removeList();
+}

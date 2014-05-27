@@ -108,6 +108,7 @@ module.exports = {
 						})
 					})
 				} else {
+					data.created = r.now();
 					r.table('lists').insert(data)
 					.run(conn, function (err, result) {
 						if (err) {

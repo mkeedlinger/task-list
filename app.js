@@ -12,7 +12,8 @@ var express = require('express'),
     r = require('rethinkdb'),
     config = require('./config'),
     def = require('./def'),
-    colors = require('colors');
+    colors = require('colors'),
+    bcrypt = require('bcrypt');
 
 /*
 ################
@@ -31,6 +32,7 @@ server.listen(config.serverPort);
 io.sockets.on('connection', function(socket) { // defines socket actions
     socket.on('liveUpdater', function(data) {
         def.onLiveUpdater(data);
+        socket.broadcast.emit('updateClient', data);
     });
     def.dbConnect(function (err, conn) { // get the info from db, make client init
     	r.table('lists').get(testList.id).run(conn, function (err, result) {
