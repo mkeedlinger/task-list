@@ -2,7 +2,7 @@ module.exports = {
 	"serverPort": 3000,
 	"ioLogLevel": 1,
 	"dbConnect": {
-		"host": "192.168.2.46",
+		"host": "10.225.10.7",
 		"port": 28015, // default: 28015
 		"db": 'test'
 	},

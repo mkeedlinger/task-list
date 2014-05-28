@@ -279,9 +279,9 @@ function createInitList (data) {
 	for (var i in data) {
 		addLiLast(data[i].task, data[i].checked, data[i].uuid);
 	};
-	if (data.list.length === 0) {
+	// if (data.list.length === 0) {
 		addLiLast();
-	};
+	// };
 	setListDetails(data.id, data.name);
 	hideCover();
 }

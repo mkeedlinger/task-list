@@ -24,67 +24,43 @@ module.exports = {
 
 	log: { // defines useful logs
 		dbError: function () { // when there is an error that isn't exactly fatal
-			console.log('<DB error>'.bold.underline.magenta);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</DB error>'.italic.magenta);
+			def.log.creator('DB error', 'magenta', arguments);
 		},
 
 		dbFatal: function () { // when there is an error that should NEVER happen
-			console.log('<DB fatal error>'.bold.underline.red);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</DB fatal error>'.italic.red);
+			def.log.creator('DB fatal error', 'red', arguments);
 		},
 
 		dbInfo: function () { // logs info that may be nice to have
-			console.log('<DB info>'.bold.underline.cyan);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</DB info>'.italic.cyan);
+			def.log.creator('DB info', 'cyan', arguments);
 		},
 
 		debug: function () { // should only be used to help debug
-			console.log('<debug>'.bold.underline.yellow);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</debug>'.italic.yellow);
+			def.log.creator('debug', 'yellow', arguments);
 		},
 
 		fatal: function () { // used for general fatal bugs
-			console.log('<fatal error>'.bold.underline.red);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</DB fatal error>'.italic.red);
+			def.log.creator('fatal error', 'red', arguments);
 		},
 
 		error: function () { // used for general bugs
-			console.log('<error>'.bold.underline.magenta);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</error>'.italic.magenta);
+			def.log.creator('error', 'magenta', arguments);
 		},
 
 		ioInfo: function () { // socket.io info
-			console.log('<IO info>'.bold.underline.cyan);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
-			}
-			console.log('</IO info>'.italic.cyan);
+			def.log.creator('IO info', 'cyan', arguments)
 		},
 
 		authError: function () { // any errors that have to do with auth
-			console.log('<Auth error>'.bold.underline.magenta);
-			for (arg in arguments) {
-				console.log(arguments[arg]);
+			def.log.creator('Auth error', 'magenta', arguments);
+		},
+
+		creator: function (tag, color, args) { // tryin to keep my logs dry
+			console.log(('<' + tag + '>').bold.underline[color]);
+			for (arg in args) {
+				console.log(args[arg]);
 			}
-			console.log('</Auth error>'.italic.magenta);
+			console.log(('</' + tag + '>').italic[color]);
 		}
 	},
 
